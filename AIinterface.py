@@ -25,7 +25,7 @@ outputcount = 1
 neuroncounts = [inputcount,30,30,30,30,outputcount]
 acfunction = 'tanh'
 
-learningrate = 0.005
+learningrate = 0.04
 
 inputs = []#aiinputs#[]#[[0,0],[0,1],[1,0],[1,1],[1,1], [0.5,0.5]]*100
 targets = []#aioutputs# [[-1],[1],[1],[-1],[-1]]*100
@@ -36,7 +36,7 @@ for i in range(10003):
     currenttarget = int(boolean)*2-1
     inputs.append([x,y])
     targets.append([currenttarget])
-
+plt.show()
 assertcorrectinput()
 
 tally = 0

@@ -13,7 +13,7 @@ def runbackprop(net, networkinput, networktarget):
 
 
 class Trainer:
-    roundsperprint = 304
+    roundsperprint = 34
     updatetime = 20
     testpercent = 10
     batchsize = 1000
