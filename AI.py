@@ -9,18 +9,19 @@ def save(network, name="AI.txt"):
 
 class NeuralNetwork:
 
-    def __init__(self, neuroncounts, learningrate = 0.05, activationfunction = "tanh"):
+    def __init__(self, neuroncounts, weightlearningrate = 0.05,biaslearningrate=0.05, activationfunction = "tanh"):
         self.neuroncounts = np.array(neuroncounts) #first row is inputs, last is outputs
         self.biases = self.generatebiases()
         self.weights = self.generateweights()
         self.activationfunction = getfunction(activationfunction)
 
-        self.learnrate = learningrate
+        self.weightlearnrate = weightlearningrate
+        self.biaslearnrate = biaslearningrate
 
     def generateweights(self):
         weights = []
         for i in range(len(self.neuroncounts)-1):
-            nextweights = np.random.random((self.neuroncounts[i],self.neuroncounts[i+1]))/self.neuroncounts[i]
+            nextweights = (np.random.random((self.neuroncounts[i],self.neuroncounts[i+1])))/self.neuroncounts[i]
             weights.append(nextweights)
         return weights
     
@@ -87,8 +88,8 @@ class NeuralNetwork:
     
     def gradientdescent(self, gradients, biases):
         for i in range(len(self.weights)):
-            self.weights[i] -= self.learnrate * gradients[i]
-            self.biases[i] -= self.learnrate * biases[i]
+            self.weights[i] -= self.weightlearnrate * gradients[i]
+            self.biases[i] -= 0*self.biaslearnrate * biases[i]
 
 
 

@@ -13,11 +13,11 @@ def runbackprop(net, networkinput, networktarget):
 
 
 class Trainer:
-    roundsperprint = 34
-    updatetime = 20
+    roundsperprint = 340
+    updatetime = 100
     testpercent = 10
-    batchsize = 1000
-    learnratefunction = lambda lr: max(0.001,lr*0.99999)
+    batchsize = 200
+    learnratefunction = lambda lr: max(0.001,lr*0.99995)
 
 
     def __init__(self, net, inputs, targets):
@@ -52,7 +52,7 @@ class Trainer:
     def log(self):
         print("Training Error:", sum(self.errorrecords[-Trainer.roundsperprint*Trainer.batchsize:])/Trainer.roundsperprint/Trainer.batchsize)
         print("Test Error: ", self.test())
-        print("Learning rate: ", self.network.learnrate)
+        print("Learning rate: ", self.network.weightlearnrate)
         rand = randint(0, len(self.testinputs)-1)
         print("Sample Input:", self.testinputs[rand])
         print("Sample Target: ", self.testtargets[rand])
@@ -103,7 +103,9 @@ class Trainer:
     
 
     def updatelearnrate(self):
-        self.network.learnrate = Trainer.learnratefunction(self.network.learnrate)
+        self.network.weightlearnrate = Trainer.learnratefunction(self.network.weightlearnrate)
+        self.network.biaslearnrate = Trainer.learnratefunction(self.network.biaslearnrate)
+
 
 
     def test(self):
