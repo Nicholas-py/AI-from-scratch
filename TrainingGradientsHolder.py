@@ -32,6 +32,8 @@ class NpArrayList:
         return NpArrayList(datas)
     
 
+prexistingweights = {}
+prexistingbias = {}
 
 
 class TrainingGradientsHolder:
@@ -40,8 +42,18 @@ class TrainingGradientsHolder:
         self.network = parent.network
         self.addnumber = 0
 
-        self.weights = self.generatebaseweights()
-        self.biases = self.generatebasebiases()
+        if str(self.network.neuroncounts) not in prexistingweights:
+            self.weights = self.generatebaseweights()
+            prexistingweights[str(self.network.neuroncounts)] = self.weights
+        else:
+            self.weights = prexistingweights[str(self.network.neuroncounts)]
+
+        if str(self.network.neuroncounts) not in prexistingbias:
+            self.biases = self.generatebasebiases()
+            prexistingbias[str(self.network.neuroncounts)] = self.biases
+        else:
+            self.biases = prexistingbias[str(self.network.neuroncounts)]
+
     
 
     def generatebaseweights(self):

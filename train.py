@@ -11,13 +11,12 @@ def runbackprop(net, networkinput, networktarget):
     return weightgradients, biasgradients, error
 
 
-
 class Trainer:
     roundsperprint = 340
     updatetime = 100
     testpercent = 10
     batchsize = 200
-    learnratefunction = lambda lr: max(0.001,lr*0.99995)
+    
 
 
     def __init__(self, net, inputs, targets):
@@ -30,7 +29,18 @@ class Trainer:
         self.testtargets = package[3]
 
         self.errorrecords = []
+        self.lasterror = 100
         self.cleanerrorrecords = []
+        self.randtodisplay = randint(0, len(self.testinputs)-1)
+
+        self.learnratefunction = self.descendinglearnrate
+
+    def errortiedlearnrate(self,lr):
+        factor = 10
+        min(lr*factor,factor,self.lasterror)/factor
+
+    def descendinglearnrate(self,lr):
+        return max(0.001, lr*0.99995)
     
     def splittraintest(self, inputs, targets):
         tally = 0
@@ -50,13 +60,12 @@ class Trainer:
 
 
     def log(self):
-        print("Training Error:", sum(self.errorrecords[-Trainer.roundsperprint*Trainer.batchsize:])/Trainer.roundsperprint/Trainer.batchsize)
+        print("Training Error:", self.lasterror)
         print("Test Error: ", self.test())
         print("Learning rate: ", self.network.weightlearnrate)
-        rand = randint(0, len(self.testinputs)-1)
-        print("Sample Input:", self.testinputs[rand])
-        print("Sample Target: ", self.testtargets[rand])
-        print('Sample Result:', self.network.fire(self.testinputs[rand])[0])
+        print("Sample Input:", self.testinputs[self.randtodisplay])
+        print("Sample Target: ", self.testtargets[self.randtodisplay])
+        print('Sample Result:', self.network.fire(self.testinputs[self.randtodisplay])[0])
 
     def condenseerrorrecords(self, amount = 1000):
         newputs = []
@@ -73,7 +82,6 @@ class Trainer:
                 print(str(int(100*i/Trainer.roundsperprint))+"% done")
 
             tally += 1
-            #tally%len(self.traininputs)#
             trainholder = TrainingGradientsHolder(self)
             for i in range(Trainer.batchsize):
 
@@ -85,6 +93,7 @@ class Trainer:
             self.network.gradientdescent(weightgrads, biasgrads)
 
             self.updatelearnrate()
+        self.calclasterror()
         
 
 
@@ -103,8 +112,8 @@ class Trainer:
     
 
     def updatelearnrate(self):
-        self.network.weightlearnrate = Trainer.learnratefunction(self.network.weightlearnrate)
-        self.network.biaslearnrate = Trainer.learnratefunction(self.network.biaslearnrate)
+        self.network.weightlearnrate = self.learnratefunction(self.network.weightlearnrate)
+        #self.network.biaslearnrate = Trainer.learnratefunction(self.network.biaslearnrate)
 
 
 
@@ -114,7 +123,13 @@ class Trainer:
             result = self.network.fire(self.testinputs[i])[0]
             error += NeuralNetwork.error(self.testtargets[i], result)
         return error/len(self.testinputs)
+    
 
+    def calclasterror(self):
+        self.lasterror = sum(self.errorrecords[-Trainer.roundsperprint*Trainer.batchsize:])/Trainer.roundsperprint/Trainer.batchsize
+
+    def save(self):
+        save(self.network)
 
 
 

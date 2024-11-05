@@ -89,7 +89,7 @@ class NeuralNetwork:
     def gradientdescent(self, gradients, biases):
         for i in range(len(self.weights)):
             self.weights[i] -= self.weightlearnrate * gradients[i]
-            self.biases[i] -= 0*self.biaslearnrate * biases[i]
+            self.biases[i] -= self.biaslearnrate * biases[i]
 
 
 

@@ -25,7 +25,7 @@ outputcount = 1
 neuroncounts = [inputcount,10,10,10,10,10,outputcount]
 acfunction = 'tanh'
 
-weightlearningrate = 0.6
+weightlearningrate = 1
 biaslearningrate = 0
 
 inputs = []#aiinputs#[]#[[0,0],[0,1],[1,0],[1,1],[1,1], [0.5,0.5]]*100
@@ -33,7 +33,7 @@ targets = []#aioutputs# [[-1],[1],[1],[-1],[-1]]*100
 
 for i in range(10003):
     x, y = random(), random()
-    boolean = (x-0.5)**2+(y-0.5)**2 < 0.2
+    boolean = (x-0.5)**2+(y-0.5)**2 < 0.2 and (x-0.5)**2+(y-0.5)**2 > 0.05
     currenttarget = int(boolean)*2-1
     inputs.append([x,y])
     targets.append([currenttarget])
@@ -59,7 +59,11 @@ else:
 
 if __name__ == '__main__':
     trainer = Trainer(net, inputs, targets)
-    trainer.train()
+    try:
+        trainer.train()
+    except KeyboardInterrupt:
+        trainer.save()
+        quit()
 
 
 
