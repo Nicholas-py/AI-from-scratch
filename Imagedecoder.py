@@ -11,7 +11,7 @@ for i in range(1,mcibear.size[0]):
         compressed = [i/mcibear.size[0],j/mcibear.size[1]]
         aiinputs.append(compressed)
         #colour = int((compressed[0]**2+compressed[1]**2)<0.7)*2-1
-        colour = int(pix[i,j][2] > 100)
+        colour = int(pix[i,j][2] < 100)
         aioutputs.append([colour*2-1])
         #aioutputs.append([colour])
         pix[i,j] = (255*colour, 255*colour, 255*colour, 255)

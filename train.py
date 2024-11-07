@@ -12,10 +12,10 @@ def runbackprop(net, networkinput, networktarget):
 
 
 class Trainer:
-    roundsperprint = 340
-    updatetime = 100
+    roundsperprint = 3400
+    updatetime = 200
     testpercent = 10
-    batchsize = 200
+    batchsize = 300
     
 
 
@@ -23,10 +23,8 @@ class Trainer:
         self.network = net
         
         package = self.splittraintest(inputs, targets)
-        self.traininputs = package[0]
-        self.traintargets = package[1]
-        self.testinputs = package[2]
-        self.testtargets = package[3]
+        self.traininputs, self.traintargets = package[0], package[1]
+        self.testinputs, self.testtargets = package[2], package[3]
 
         self.errorrecords = []
         self.lasterror = 100
