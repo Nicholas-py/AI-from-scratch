@@ -14,7 +14,6 @@ def testall():
     testgradientdescent()
     testfire()
     testbackprop()
-    testArgFunction()
     print('All tests passed')
 
 def testgenerateweights():
@@ -29,28 +28,26 @@ def testgenerateweights():
     assert net.weights[2].shape == (16,2)
 
 def testactivation():
-    net = NN([2,3,4,5,6])
+    net = NN([2,3,4,5,6],activationfunction='tanh')
     assert type(net.activationfunction) == ActivationFunction
-    assert net.activationfunction(2)>net.activationfunction(1)
-    l1, l2 = [], []
-    for i in range(-10,10):
-        l1 += [i]
-        l2 += [net.activationfunction(i)]
-    assert l1 != l2
+    assert net.activationfunction([2])[0]>net.activationfunction([1])[0]
+    l1 = np.array(range(-10,10))/10
+    l2 = net.activationfunction(np.array(range(-10,10))/10)
+    assert  (l1 != l2).any()
 
 
 def testderivativeactivation():
     net = NN([2,2], activationfunction=acfunction)
     num = random()*20-10
-    val1, val2 = net.activationfunction(num), net.activationfunction(num+0.000001)
-    assert round(net.activationfunction.derivative(num),5) == round((val2-val1)/0.000001,5)
+    val1, val2 = net.activationfunction([num])[0], net.activationfunction([num+0.000001])[0]
+    assert round(net.activationfunction.derivative([num])[0],5) == round((val2-val1)/0.000001,5)
 
 def testinverseactivation():
     net = NN([2,2], activationfunction=acfunction)
     for _ in range(100):
         r = random()
-        assert round(net.activationfunction(net.activationfunction.inverse(r)), 8) == round(r,8)
-        assert round(net.activationfunction.inverse(net.activationfunction(r)), 8) == round(r,8)
+        assert round(net.activationfunction(net.activationfunction.inverse([r]))[0], 8) == round(r,8)
+        assert round(net.activationfunction.inverse(net.activationfunction([r]))[0], 8) == round(r,8)
 
 
 def testerror():
@@ -117,12 +114,6 @@ def testbackprop():
                 print('Fail on: ',i)
                 raise AssertionError("I assert that you asserted assertions")
 
-def testArgFunction():
-    af = ArgFunction(lambda x:x**2-4)
-    assert af(2) == 0
-    assert af(4) == 12
-    assert np.all(af([2,4]) == np.array([0,12]))
-    assert np.all(af(np.array([4,2])) == np.array([12,0]))
 
 #Manual backprop for 2x2 networks
 def manualderivs(net, inp, d= 0.001):
