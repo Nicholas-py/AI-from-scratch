@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pickle
 from AI import NeuralNetwork
 from random import randint, shuffle, random
-from Imagedecoder import aiinputs, aioutputs, getimage
+from Imagedecoder import getbear
 from train import Trainer
 
 def assertcorrectinput():
@@ -22,25 +22,25 @@ def load(name="AI.txt"):
 
 inputcount = 2
 outputcount = 1
-neuroncounts = [inputcount,60,60,60,60,60,60,60,60,60,outputcount]
-acfunction = 'tanh'
+neuroncounts = [inputcount,10,10,10,10,10,outputcount]
+acfunction = 'reLU'
+lowerval = 0
 
 weightlearningrate = 1
 biaslearningrate = 0
 
-inputs = []
-targets = []
 def genring(datanumber):
+    inputs = []
+    targets = []
     for _ in range(datanumber):
         x, y = random(), random()
         boolean = (x-0.5)**2+(y-0.5)**2 < 0.2 and 2*(x-0.5)**2+(y-0.5)**2 > 0.05
-        currenttarget = int(boolean)*2-1
+        currenttarget = int(boolean)
+        if lowerval == -1:
+            currenttarget = currenttarget*2-1
         inputs.append([x,y])
         targets.append([currenttarget])
-
-def genbear():
-    [inputs.append(i) for i in aiinputs]
-    [targets.append(i) for i in aioutputs]
+    return inputs, targets
 
 def plotinputs(inputs, targets):
     if len(inputs[0]) == 2 and len(targets[0]) == 1:
@@ -56,9 +56,8 @@ def plotinputs(inputs, targets):
         plt.show(block=False)
 
 #genring(100003)
-genbear()
+inputs, targets = getbear(lowerval=lowerval)
 assertcorrectinput()
-
 tally = 0
 error = 0
 

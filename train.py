@@ -117,7 +117,7 @@ class Trainer:
 
     def updatelearnrate(self):
         self.network.weightlearnrate = self.learnratefunction(self.network.weightlearnrate)
-        #self.network.biaslearnrate = Trainer.learnratefunction(self.network.biaslearnrate)
+        self.network.biaslearnrate = self.learnratefunction(self.network.biaslearnrate)
 
 
 

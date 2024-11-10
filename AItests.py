@@ -28,7 +28,7 @@ def testgenerateweights():
     assert net.weights[2].shape == (16,2)
 
 def testactivation():
-    net = NN([2,3,4,5,6],activationfunction='tanh')
+    net = NN([2,3,4,5,6],activationfunction=acfunction)
     assert type(net.activationfunction) == ActivationFunction
     assert net.activationfunction([2])[0]>net.activationfunction([1])[0]
     l1 = np.array(range(-10,10))/10
