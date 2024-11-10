@@ -1,5 +1,5 @@
 from AI import NeuralNetwork, save
-from InputInterface import getinputabouttraining
+from InputInterface import getinputabouttraining, EndTraining
 from TrainingGradientsHolder import TrainingGradientsHolder
 from random import random, randint
 
@@ -106,7 +106,7 @@ class Trainer:
 
             try:
                 getinputabouttraining(self)
-            except ZeroDivisionError:
+            except EndTraining:
                 break
             
             self.trainstep()

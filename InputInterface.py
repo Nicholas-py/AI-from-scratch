@@ -3,6 +3,9 @@ from Imagedecoder import getimage
 import numpy as np
 from AI import save
 
+class EndTraining(Exception):
+    pass
+
 def plotresults(errorrecords):
     ax = plt.subplot(2,1,1)
     ax.plot(errorrecords)
@@ -30,7 +33,7 @@ def getinputabouttraining(trainer):
             print("Your results:", userresults[0])
         elif ip[0] == 'q' or ip[0] == 'x' or ip[0:3] == 'cd ' or ip == "c:":
             save(trainer.network)
-            raise ZeroDivisionError("Exiting program")
+            raise EndTraining("Exiting program")
         elif ip[0] == 's':
             save(trainer.network)
         elif ip[0] == 'w':
