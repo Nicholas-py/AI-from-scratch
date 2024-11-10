@@ -22,14 +22,14 @@ def load(name="AI.txt"):
 
 inputcount = 2
 outputcount = 1
-neuroncounts = [inputcount,10,10,10,10,10,outputcount]
+neuroncounts = [inputcount,60,60,60,60,60,60,60,60,60,outputcount]
 acfunction = 'tanh'
 
 weightlearningrate = 1
 biaslearningrate = 0
 
-inputs = []#aiinputs
-targets = []#aioutputs
+inputs = []
+targets = []
 def genring(datanumber):
     for _ in range(datanumber):
         x, y = random(), random()
@@ -37,6 +37,10 @@ def genring(datanumber):
         currenttarget = int(boolean)*2-1
         inputs.append([x,y])
         targets.append([currenttarget])
+
+def genbear():
+    [inputs.append(i) for i in aiinputs]
+    [targets.append(i) for i in aioutputs]
 
 def plotinputs(inputs, targets):
     if len(inputs[0]) == 2 and len(targets[0]) == 1:
@@ -51,9 +55,9 @@ def plotinputs(inputs, targets):
         plt.scatter([i[0] for i in toplot2], [i[1] for i in toplot2])
         plt.show(block=False)
 
-genring(100003)
+#genring(100003)
+genbear()
 assertcorrectinput()
-plotinputs(inputs,targets)
 
 tally = 0
 error = 0
@@ -67,6 +71,8 @@ else:
 trainer = Trainer(net, inputs, targets)
 
 if __name__ == '__main__':
+    plotinputs(inputs,targets)
+
     try:
         trainer.train()
     except KeyboardInterrupt:

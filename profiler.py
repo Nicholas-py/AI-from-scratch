@@ -1,5 +1,6 @@
 import cProfile as profile
-from AIinterface import trainer
+from AIinterface import trainer,net 
+from train import runbackprop
 from ActivationFunctions import HypTan, HypTanFast
 from timeit import Timer
 import numpy as np
@@ -13,6 +14,15 @@ def timeacfunction(activationfunction):
 
 timeacfunction(HypTan)
 timeacfunction(HypTanFast)
+
+def backpropspeedtest():
+    inp = np.array([0.56, 0.23])
+    op = np.array([1])
+    for i in range(100000):
+        runbackprop(net, inp, op)
+
+profile.run('backpropspeedtest()')
+input()
 profile.run('trainer.train()')
 
 

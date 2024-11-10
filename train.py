@@ -1,7 +1,7 @@
 from AI import NeuralNetwork, save
 from InputInterface import getinputabouttraining
 from TrainingGradientsHolder import TrainingGradientsHolder
-from random import randint
+from random import random, randint
 
 
 def runbackprop(net, networkinput, networktarget):
@@ -13,7 +13,7 @@ def runbackprop(net, networkinput, networktarget):
 
 class Trainer:
     roundsperprint = 3400
-    updatetime = 200
+    updatetime = 50
     testpercent = 10
     batchsize = 300
     
@@ -38,7 +38,7 @@ class Trainer:
         min(lr*factor,factor,self.lasterror)/factor
 
     def descendinglearnrate(self,lr):
-        return max(0.001, lr*0.99995)
+        return max(0.001, lr*0.99998)
     
     def splittraintest(self, inputs, targets):
         tally = 0
@@ -73,21 +73,27 @@ class Trainer:
             newputs.append(average)
         self.cleanerrorrecords = newputs
 
-    def trainstep(self):
-        tally = 0
-        for i in range(Trainer.roundsperprint):
-            if (i+1)%Trainer.updatetime == 0:
-                print(str(int(100*i/Trainer.roundsperprint))+"% done")
+    def checktoprint(i):
+        if (i+1)%Trainer.updatetime == 0:
+            print(str(int(100*i/Trainer.roundsperprint))+"% done")
 
-            tally += 1
+    def getresults(self):
+        dataindex = int(random()* (len(self.traininputs)-1))
+        results = runbackprop(self.network, self.traininputs[dataindex], self.traintargets[dataindex])
+        return results
+
+
+    def trainstep(self):
+        for i in range(Trainer.roundsperprint):
+            Trainer.checktoprint(i)
+
             trainholder = TrainingGradientsHolder(self)
             for i in range(Trainer.batchsize):
-
-                dataindex = randint(0, len(self.traininputs)-1)
-                results = runbackprop(self.network, self.traininputs[dataindex], self.traintargets[dataindex])
+                results = self.getresults()
                 trainholder.addtrainresults(results)
             
             weightgrads, biasgrads = trainholder.returntotals()
+
             self.network.gradientdescent(weightgrads, biasgrads)
 
             self.updatelearnrate()
