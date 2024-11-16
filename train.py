@@ -12,14 +12,14 @@ def runbackprop(net, networkinput, networktarget):
 
 
 class Trainer:
-    roundsperprint = 3400
-    updatetime = 50
-    testpercent = 10
-    batchsize = 300
+    roundsperprint = 1000
+    updatetime = 100
+    testpercent = 95
+    batchsize = 200
     
 
 
-    def __init__(self, net, inputs, targets):
+    def __init__(self, net, inputs, targets, otherargs):
         self.network = net
         
         package = self.splittraintest(inputs, targets)
@@ -33,12 +33,18 @@ class Trainer:
 
         self.learnratefunction = self.descendinglearnrate
 
+        self.roundsperprint = otherargs[0]
+        self.updatetime = otherargs[1]
+        self.testpercent = otherargs[2]
+        self.batchsize = otherargs[3]
+
+
     def errortiedlearnrate(self,lr):
         factor = 10
         min(lr*factor,factor,self.lasterror)/factor
 
     def descendinglearnrate(self,lr):
-        return max(0.001, lr*0.99998)
+        return max(0.000, lr*0.99995)
     
     def splittraintest(self, inputs, targets):
         tally = 0

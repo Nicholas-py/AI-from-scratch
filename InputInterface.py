@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from Imagedecoder import getimage
 import numpy as np
 from AI import save
+import random
 
 class EndTraining(Exception):
     pass
@@ -24,7 +25,7 @@ def getinputabouttraining(trainer):
         if len(ip) == 0:
             return
         if ip[0] == 'p' or ip[0] == 'g':
-            trainer.condenseerrorrecords(10000)
+            trainer.condenseerrorrecords(5000)
             plotresults(trainer.cleanerrorrecords)
         elif ip[0] == 'f':
             print("Input the test inputs: ")
@@ -45,6 +46,9 @@ def getinputabouttraining(trainer):
                 print(i)
         elif ip[0] == 'i':
             getimage(trainer.network)
+        elif ip[0] == 't':
+            r = random.randint(0, len(trainer.traininputs)-20)
+            [print(trainer.traininputs[i], trainer.traintargets[i]) for i in range(r, r+20)]
         else:
             return
 

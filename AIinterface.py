@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pickle
 from AI import NeuralNetwork
 from random import randint, shuffle, random
-from Imagedecoder import getbear
+from Imagedecoder import genbear
 from train import Trainer
 
 def assertcorrectinput():
@@ -23,13 +23,19 @@ def load(name="AI.txt"):
 inputcount = 2
 outputcount = 1
 neuroncounts = [inputcount,10,10,10,10,10,outputcount]
-acfunction = 'reLU'
-lowerval = 0
+acfunction = 'tanh'
+lowerval = -1
+
+roundsperprint = 1000
+updatetime = 100
+testpercent = 95
+batchsize = 200
+
 
 weightlearningrate = 1
 biaslearningrate = 0
 
-def genring(datanumber):
+def genring(datanumber, lowerval=lowerval):
     inputs = []
     targets = []
     for _ in range(datanumber):
@@ -53,13 +59,12 @@ def plotinputs(inputs, targets):
                 toplot2.append(inputs[i])
         plt.scatter([i[0] for i in toplot1], [i[1] for i in toplot1])
         plt.scatter([i[0] for i in toplot2], [i[1] for i in toplot2])
-        plt.show(block=False)
+        plt.show()
 
-#genring(100003)
-inputs, targets = getbear(lowerval=lowerval)
+inputs, targets = genbear(10003, lowerval)#getbear(lowerval=lowerval)
 assertcorrectinput()
-tally = 0
-error = 0
+
+args = [roundsperprint, updatetime, testpercent, batchsize]
 
 if __name__ == '__main__' and 'y' in input("Load last result?"):
     print('loading... (probably broken)')
@@ -67,10 +72,17 @@ if __name__ == '__main__' and 'y' in input("Load last result?"):
 else:  
     net = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
 
-trainer = Trainer(net, inputs, targets)
+trainer = Trainer(net, inputs, targets, args)
 
 if __name__ == '__main__':
     plotinputs(inputs,targets)
+    print('Length:', len(targets))
+    suum = 0
+    for i in targets:
+        if i[0] == lowerval:
+            suum += 1
+    print('Zeroes:',suum)
+
 
     try:
         trainer.train()

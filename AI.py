@@ -21,7 +21,7 @@ class NeuralNetwork:
     def generateweights(self):
         weights = []
         for i in range(len(self.neuroncounts)-1):
-            nextweights = (np.random.random((self.neuroncounts[i],self.neuroncounts[i+1])))/self.neuroncounts[i]
+            nextweights = ((np.random.random((self.neuroncounts[i],self.neuroncounts[i+1])))/self.neuroncounts[i])*(0.5*i+1)
             weights.append(nextweights)
         return weights
     
