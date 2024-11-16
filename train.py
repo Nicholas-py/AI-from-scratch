@@ -44,7 +44,7 @@ class Trainer:
         min(lr*factor,factor,self.lasterror)/factor
 
     def descendinglearnrate(self,lr):
-        return max(0.000, lr*0.99995)
+        return max(0.000, lr*0.99999)
     
     def splittraintest(self, inputs, targets):
         tally = 0

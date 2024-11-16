@@ -33,7 +33,7 @@ batchsize = 200
 
 
 weightlearningrate = 1
-biaslearningrate = 0
+biaslearningrate = 0.001
 
 def genring(datanumber, lowerval=lowerval):
     inputs = []
@@ -61,7 +61,7 @@ def plotinputs(inputs, targets):
         plt.scatter([i[0] for i in toplot2], [i[1] for i in toplot2])
         plt.show()
 
-inputs, targets = genbear(10003, lowerval)#getbear(lowerval=lowerval)
+inputs, targets = genbear(100003, lowerval)#getbear(lowerval=lowerval)
 assertcorrectinput()
 
 args = [roundsperprint, updatetime, testpercent, batchsize]
