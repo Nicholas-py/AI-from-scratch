@@ -3,7 +3,8 @@ import pickle
 from AI import NeuralNetwork
 from random import randint, shuffle, random
 from Imagedecoder import genbear
-from train import Trainer
+from train import Trainer, multitrain
+from InputInterface import EndTraining
 
 def assertcorrectinput():
     for i in targets:
@@ -14,7 +15,13 @@ def assertcorrectinput():
 def load(name="AI.txt"):
     return pickle.load(open(name,"rb"))
 
-
+def printlengths(targets):
+    print('Length:', len(targets))
+    suum = 0
+    for i in targets:
+        if i[0] == lowerval:
+            suum += 1
+    print('Zeroes:',suum)
 
 #################
 ####SETTINGS#####
@@ -22,13 +29,13 @@ def load(name="AI.txt"):
 
 inputcount = 2
 outputcount = 1
-neuroncounts = [inputcount,10,10,10,10,10,outputcount]
+neuroncounts = [inputcount,30,30,30,30,30,outputcount]
 acfunction = 'tanh'
 lowerval = -1
 
-roundsperprint = 1000
+roundsperprint = 100
 updatetime = 100
-testpercent = 95
+testpercent = 5
 batchsize = 200
 
 
@@ -66,29 +73,45 @@ assertcorrectinput()
 
 args = [roundsperprint, updatetime, testpercent, batchsize]
 
-if __name__ == '__main__' and 'y' in input("Load last result?"):
-    print('loading... (probably broken)')
-    net = load()
-else:  
-    net = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
-
-trainer = Trainer(net, inputs, targets, args)
-
 if __name__ == '__main__':
     plotinputs(inputs,targets)
-    print('Length:', len(targets))
-    suum = 0
-    for i in targets:
-        if i[0] == lowerval:
-            suum += 1
-    print('Zeroes:',suum)
+    printlengths(targets)
+
+    dual = 'y' in input("Dual train? ")
+    if not dual:
+        if 'y' in input("Load last result?"):
+            print('loading... (probably broken)')
+            net = load()
+        else:  
+            net = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
+        trainer = Trainer(net, inputs, targets, args)
+        try:
+            trainer.train()
+        except (KeyboardInterrupt, EndTraining):
+            print("Exiting")
+            trainer.save()
+            quit()
 
 
-    try:
-        trainer.train()
-    except KeyboardInterrupt:
-        trainer.save()
-        quit()
+    if dual:
+        net1 = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
+        net2 = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
+        trainer = Trainer(net1, inputs, targets, args)
+        trainer2 = Trainer(net2, inputs, targets, args)
+
+        while True:
+            try:
+                multitrain(trainer, trainer2)
+            except (KeyboardInterrupt, EndTraining):
+                print("Exiting")
+                trainer.save()
+                quit()
+
+
+
+
+
+
 
 
 

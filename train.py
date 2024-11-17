@@ -50,7 +50,7 @@ class Trainer:
         tally = 0
         trainputs, traingets, testputs, testgets = [],[],[],[]
         for i in range(len(inputs)):
-            tally += Trainer.testpercent
+            tally += self.testpercent
 
             if tally > 100:
                 tally = tally - 100
@@ -79,9 +79,9 @@ class Trainer:
             newputs.append(average)
         self.cleanerrorrecords = newputs
 
-    def checktoprint(i):
-        if (i+1)%Trainer.updatetime == 0:
-            print(str(int(100*i/Trainer.roundsperprint))+"% done")
+    def checktoprint(self,i):
+        if (i+1)%self.updatetime == 0:
+            print(str(int(100*i/self.roundsperprint))+"% done")
 
     def getresults(self):
         dataindex = int(random()* (len(self.traininputs)-1))
@@ -90,11 +90,11 @@ class Trainer:
 
 
     def trainstep(self):
-        for i in range(Trainer.roundsperprint):
-            Trainer.checktoprint(i)
+        for i in range(self.roundsperprint):
+            self.checktoprint(i)
 
             trainholder = TrainingGradientsHolder(self)
-            for i in range(Trainer.batchsize):
+            for i in range(self.batchsize):
                 results = self.getresults()
                 trainholder.addtrainresults(results)
             
@@ -104,21 +104,17 @@ class Trainer:
 
             self.updatelearnrate()
         self.calclasterror()
+
         
 
 
     def train(self):
         while True:
 
-            try:
-                getinputabouttraining(self)
-            except EndTraining:
-                break
-            
+            getinputabouttraining(self)
             self.trainstep()
             self.log()
 
-        save(self.network)
     
 
     def updatelearnrate(self):
@@ -136,7 +132,7 @@ class Trainer:
     
 
     def calclasterror(self):
-        self.lasterror = sum(self.errorrecords[-Trainer.roundsperprint*Trainer.batchsize:])/Trainer.roundsperprint/Trainer.batchsize
+        self.lasterror = sum(self.errorrecords[-self.roundsperprint*self.batchsize:])/self.roundsperprint/self.batchsize
 
     def save(self):
         save(self.network)
@@ -144,6 +140,14 @@ class Trainer:
 
 
 
+def multitrain(trainer1, trainer2):
+    getinputabouttraining(trainer1, trainer2)
+    print('\nNetwork 1\n')
+    trainer1.trainstep()
+    trainer1.log()
+    print('\nNetwork 2\n')
+    trainer2.trainstep()
+    trainer2.log()
 
 
 

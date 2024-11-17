@@ -7,31 +7,50 @@ import random
 class EndTraining(Exception):
     pass
 
-def plotresults(errorrecords):
-    ax = plt.subplot(2,1,1)
+def plotresults(errorrecords, ax2 = 1, max2 = 1):
+    ax = plt.subplot(2,max2,ax2)
     ax.plot(errorrecords)
     ax.set_title("Error over time")
-    ax2 = plt.subplot(2,1,2)
+    ax2 = plt.subplot(2,max2,ax2 + max2)
     ax2.set_yscale('log')
     ax2.set_title("Error over time (log)")
     ax2.plot(errorrecords)
-    plt.show()
 
 
 
-def getinputabouttraining(trainer):
+def getinputabouttraining(trainer, trainer2 = None):
+    multi = bool(trainer2 is not None)
     while True:
         ip = input("Input: ")
         if len(ip) == 0:
             return
         if ip[0] == 'p' or ip[0] == 'g':
-            trainer.condenseerrorrecords(5000)
-            plotresults(trainer.cleanerrorrecords)
+            if not multi:
+                trainer.condenseerrorrecords(5000)
+                plotresults(trainer.cleanerrorrecords)
+            if multi:
+                trainer.condenseerrorrecords(5000)
+                trainer2.condenseerrorrecords(5000)
+                plotresults(trainer.cleanerrorrecords, 1, 2)
+                plotresults(trainer2.cleanerrorrecords, 2, 2)
+            plt.show()
+   
         elif ip[0] == 'f':
-            print("Input the test inputs: ")
-            userinput = list(map(float, input().split(' ')))
-            userresults = trainer.network.fire(np.array(userinput))
-            print("Your results:", userresults[0])
+            while True:
+                try:
+                    n = trainer.network
+                    if multi and 'y' in input("Switch to network 2? "):
+                        n = trainer2.network
+                    print("Input the test inputs: ")
+                    userinput = list(map(float, input().split(' ')))
+                    userresults = n.fire(np.array(userinput))
+                    print("Your results:", userresults[0])
+                except:
+                    break
+
+        elif ip[0] == 't':
+            r = random.randint(0, len(trainer.traininputs)-20)
+            [print(trainer.traininputs[i], trainer.traintargets[i]) for i in range(r, r+20)]
         elif ip[0] == 'q' or ip[0] == 'x' or ip[0:3] == 'cd ' or ip == "c:":
             save(trainer.network)
             raise EndTraining("Exiting program")
@@ -46,9 +65,8 @@ def getinputabouttraining(trainer):
                 print(i)
         elif ip[0] == 'i':
             getimage(trainer.network)
-        elif ip[0] == 't':
-            r = random.randint(0, len(trainer.traininputs)-20)
-            [print(trainer.traininputs[i], trainer.traintargets[i]) for i in range(r, r+20)]
+            if multi:
+                getimage(trainer2.network)
         else:
             return
 
