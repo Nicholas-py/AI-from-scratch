@@ -5,6 +5,8 @@ from random import randint, shuffle, random
 from Imagedecoder import genbear
 from train import Trainer, multitrain
 from InputInterface import EndTraining
+from settings import settings as s1 # type: ignore
+from settings import settings2 as s2 #type: ignore
 
 def assertcorrectinput():
     for i in targets:
@@ -38,7 +40,6 @@ updatetime = 100
 testpercent = 5
 batchsize = 200
 
-
 weightlearningrate = 1
 biaslearningrate = 0.001
 
@@ -71,13 +72,15 @@ def plotinputs(inputs, targets):
 inputs, targets = genbear(100003, lowerval)#getbear(lowerval=lowerval)
 assertcorrectinput()
 
-args = [roundsperprint, updatetime, testpercent, batchsize]
+args = [s1['roundsperprint'], s1['updatetime'], s1['testpercent'], s1['batchsize']]
+arg2 = [s2['roundsperprint'], s2['updatetime'], s2['testpercent'], s2['batchsize']]
+
 
 if __name__ == '__main__':
     plotinputs(inputs,targets)
     printlengths(targets)
 
-    dual = 'y' in input("Dual train? ")
+    dual = 'n' not in input("Dual train? ")
     if not dual:
         if 'y' in input("Load last result?"):
             print('loading... (probably broken)')
@@ -94,17 +97,17 @@ if __name__ == '__main__':
 
 
     if dual:
-        net1 = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
-        net2 = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
-        trainer = Trainer(net1, inputs, targets, args)
-        trainer2 = Trainer(net2, inputs, targets, args)
+        net1 = NeuralNetwork(s1['neuroncounts'], s1['weightlearningrate'], s1['biaslearningrate'], s1['acfunction'])
+        net2 = NeuralNetwork(s2['neuroncounts'], s2['weightlearningrate'], s2['biaslearningrate'], s2['acfunction'])
+        trainer1 = Trainer(net1, inputs, targets, args)
+        trainer2 = Trainer(net2, inputs, targets, arg2)
 
         while True:
             try:
-                multitrain(trainer, trainer2)
+                multitrain(trainer1, trainer2)
             except (KeyboardInterrupt, EndTraining):
                 print("Exiting")
-                trainer.save()
+                trainer1.save()
                 quit()
 
 
