@@ -8,10 +8,10 @@ class EndTraining(Exception):
     pass
 
 def plotresults(errorrecords, ax2 = 1, max2 = 1):
-    ax = plt.subplot(2,max2,ax2)
+    ax = plt.subplot(2,1,1)
     ax.plot(errorrecords)
     ax.set_title("Error over time")
-    ax2 = plt.subplot(2,max2,ax2 + max2)
+    ax2 = plt.subplot(2,1,2)
     ax2.set_yscale('log')
     ax2.set_title("Error over time (log)")
     ax2.plot(errorrecords)
@@ -26,11 +26,11 @@ def getinputabouttraining(trainer, trainer2 = None):
             return
         if ip[0] == 'p' or ip[0] == 'g':
             if not multi:
-                trainer.condenseerrorrecords(5000)
+                trainer.condenseerrorrecords(25)
                 plotresults(trainer.cleanerrorrecords)
             if multi:
-                trainer.condenseerrorrecords(5000)
-                trainer2.condenseerrorrecords(5000)
+                trainer.condenseerrorrecords(25)
+                trainer2.condenseerrorrecords(25)
                 plotresults(trainer.cleanerrorrecords, 1, 2)
                 plotresults(trainer2.cleanerrorrecords, 2, 2)
             plt.show()

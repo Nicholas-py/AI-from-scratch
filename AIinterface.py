@@ -72,8 +72,8 @@ def plotinputs(inputs, targets):
 inputs, targets = genbear(100003, lowerval)#getbear(lowerval=lowerval)
 assertcorrectinput()
 
-args = [s1['roundsperprint'], s1['updatetime'], s1['testpercent'], s1['batchsize']]
-arg2 = [s2['roundsperprint'], s2['updatetime'], s2['testpercent'], s2['batchsize']]
+args = [s1['roundsperprint'], s1['updatetime'], s1['testpercent'], s1['batchsize'], s1['descentfactor']]
+arg2 = [s2['roundsperprint'], s2['updatetime'], s2['testpercent'], s2['batchsize'], s2['descentfactor']]
 
 
 if __name__ == '__main__':

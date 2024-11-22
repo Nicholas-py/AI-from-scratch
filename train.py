@@ -37,6 +37,7 @@ class Trainer:
         self.updatetime = otherargs[1]
         self.testpercent = otherargs[2]
         self.batchsize = otherargs[3]
+        self.descentfactor = otherargs[4]
 
 
     def errortiedlearnrate(self,lr):
@@ -44,7 +45,7 @@ class Trainer:
         min(lr*factor,factor,self.lasterror)/factor
 
     def descendinglearnrate(self,lr):
-        return max(0.000, lr*0.99999)
+        return max(0.000, lr*self.descentfactor)
     
     def splittraintest(self, inputs, targets):
         tally = 0
@@ -71,7 +72,8 @@ class Trainer:
         print("Sample Target: ", self.testtargets[self.randtodisplay])
         print('Sample Result:', self.network.fire(self.testinputs[self.randtodisplay])[0])
 
-    def condenseerrorrecords(self, amount = 1000):
+    def condenseerrorrecords(self, amount = 5):
+        amount *= self.batchsize
         newputs = []
         for i in range(len(self.errorrecords)//amount):
             sublist = self.errorrecords[i*amount:(i+1)*amount+1]
