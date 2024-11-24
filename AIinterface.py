@@ -1,18 +1,18 @@
 import matplotlib.pyplot as plt
 import pickle
 from AI import NeuralNetwork
-from random import randint, shuffle, random
+from random import random
 from Imagedecoder import genbear
 from train import Trainer, multitrain
 from InputInterface import EndTraining
-from settings import settings as s1 # type: ignore
-from settings import settings2 as s2 #type: ignore
+from settings import settings as s1 
+from settings import settings2 as s2
 
 def assertcorrectinput():
     for i in targets:
-        assert len(i) == outputcount
+        assert len(i) == s1['outputcount']
     for i in inputs:
-        assert len(i) == inputcount
+        assert len(i) == s1['inputcount']
         
 def load(name="AI.txt"):
     return pickle.load(open(name,"rb"))
@@ -21,29 +21,14 @@ def printlengths(targets):
     print('Length:', len(targets))
     suum = 0
     for i in targets:
-        if i[0] == lowerval:
+        if i[0] == s1['lowerval']:
             suum += 1
     print('Zeroes:',suum)
 
-#################
-####SETTINGS#####
-#################
 
-inputcount = 2
-outputcount = 1
-neuroncounts = [inputcount,30,30,30,30,30,outputcount]
-acfunction = 'tanh'
-lowerval = -1
 
-roundsperprint = 100
-updatetime = 100
-testpercent = 5
-batchsize = 200
 
-weightlearningrate = 1
-biaslearningrate = 0.001
-
-def genring(datanumber, lowerval=lowerval):
+def genring(datanumber, lowerval=s1['lowerval']):
     inputs = []
     targets = []
     for _ in range(datanumber):
@@ -69,7 +54,7 @@ def plotinputs(inputs, targets):
         plt.scatter([i[0] for i in toplot2], [i[1] for i in toplot2])
         plt.show()
 
-inputs, targets = genbear(100003, lowerval)#getbear(lowerval=lowerval)
+inputs, targets = genbear(100003, s1['lowerval'])#getbear(lowerval=lowerval)
 assertcorrectinput()
 
 args = [s1['roundsperprint'], s1['updatetime'], s1['testpercent'], s1['batchsize'], s1['descentfactor']]
@@ -86,7 +71,7 @@ if __name__ == '__main__':
             print('loading... (probably broken)')
             net = load()
         else:  
-            net = NeuralNetwork(neuroncounts, weightlearningrate, biaslearningrate, acfunction)
+            net = NeuralNetwork(s1['neuroncounts'], s1['weightlearningrate'], s1['biaslearningrate'], s1['acfunction'])
         trainer = Trainer(net, inputs, targets, args)
         try:
             trainer.train()
