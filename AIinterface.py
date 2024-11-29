@@ -1,3 +1,5 @@
+print('Loading data...')
+
 import matplotlib.pyplot as plt
 import pickle
 from AI import NeuralNetwork
@@ -7,6 +9,7 @@ from train import Trainer, multitrain
 from InputInterface import EndTraining
 from settings import settings as s1 
 from settings import settings2 as s2
+from tictactoe import generatedata
 
 def assertcorrectinput():
     for i in targets:
@@ -54,7 +57,7 @@ def plotinputs(inputs, targets):
         plt.scatter([i[0] for i in toplot2], [i[1] for i in toplot2])
         plt.show()
 
-inputs, targets = genbear(100003, s1['lowerval'])#getbear(lowerval=lowerval)
+inputs, targets = generatedata(1)#genbear(100003, s1['lowerval']
 assertcorrectinput()
 
 args = [s1['roundsperprint'], s1['updatetime'], s1['testpercent'], s1['batchsize'], s1['descentfactor']]

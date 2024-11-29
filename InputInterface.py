@@ -3,9 +3,19 @@ from Imagedecoder import getimage
 import numpy as np
 from AI import save
 import random
+from tictactoe import playagainst, networkplayagainst
 
 class EndTraining(Exception):
     pass
+
+
+def interact(network):
+    if network.neuroncounts[0] == 2 and network.neuroncounts[-1] == 1:
+        getimage(network)
+    if network.neuroncounts[0] == 9 and network.neuroncounts[-1] == 9:
+        print(playagainst(networkplayagainst(network), -1))
+
+
 
 def plotresults(errorrecords, ax2 = 1, max2 = 1):
     ax = plt.subplot(2,1,1)
@@ -64,9 +74,9 @@ def getinputabouttraining(trainer, trainer2 = None):
             for i in trainer.network.biases:
                 print(i)
         elif ip[0] == 'i':
-            getimage(trainer.network)
+            interact(trainer.network)
             if multi:
-                getimage(trainer2.network)
+                interact(trainer2.network)
         else:
             return
 

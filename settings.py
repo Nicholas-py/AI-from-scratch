@@ -1,14 +1,14 @@
 
 settings = {
-'inputcount': 2,
-'outputcount': 1,
-'neuroncounts': [60]*5,
+'inputcount': 9,
+'outputcount': 9,
+'neuroncounts': [10]*4,
 'acfunction': 'tanh',
 'lowerval': -1,
 
-'roundsperprint': 580,
+'roundsperprint': 58,
 'updatetime': 100,
-'testpercent': 5,
+'testpercent': 0,
 'batchsize': 500,
 
 'weightlearningrate': 1,
@@ -21,9 +21,9 @@ settings['neuroncounts'] = [settings['inputcount']]+settings['neuroncounts']
 
 
 settings2 = {
-'inputcount': 2,
-'outputcount': 1,
-'neuroncounts': [90]*5,
+'inputcount': 9,
+'outputcount': 9,
+'neuroncounts': [10]*4,
 'acfunction': 'tanh',
 'lowerval': -1,
 
