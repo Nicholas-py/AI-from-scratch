@@ -22,11 +22,6 @@ def load(name="AI.txt"):
 
 def printlengths(targets):
     print('Length:', len(targets))
-    suum = 0
-    for i in targets:
-        if i[0] == s1['lowerval']:
-            suum += 1
-    print('Zeroes:',suum)
 
 
 

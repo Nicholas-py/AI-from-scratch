@@ -161,7 +161,10 @@ rand = lambda x,y: random.randint(0,8)
 
 
 def recurse(board, active):
-    lst = [board]
+    if bestmove(board) is not None:
+        lst = [board]
+    else:
+        lst = []
     for i in range(9):
         if board[i] == 0:
             board = board.copy()
@@ -176,20 +179,26 @@ def generatedata(player):
     ops  = []
     for i in inputs:
         best = bestmove(i, player)
-        new = [0]*9
         if best:
-            new[best] = 1
+            new = [best // 3 -1, best %3 -1]
+        else:
+            new = [0,0]
         ops.append(new)
     return inputs, ops
 
 def networkplayagainst(network):
     return lambda board, player : getmovefromairesults(network.fire(board))
 
+def networkplayagainst2(network):
+    return lambda board, player: getmovefromairesults2(network.fire(board))
+
 def getmovefromairesults(results):
     return results[0].argmax()
-    maxi = max(results[0])
-    print(maxi)
-    return results[0].index(maxi)
+
+def getmovefromairesults2(results):
+    num1 = round(results[0][0]) + 1
+    num2 = round(results[0][1]) + 1
+    return num1 * 3 + num2
 
 
 inputs, targets = generatedata(1)

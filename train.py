@@ -22,14 +22,10 @@ class Trainer:
     def __init__(self, net, inputs, targets, otherargs):
         self.network = net
         
-        package = self.splittraintest(inputs, targets)
-        self.traininputs, self.traintargets = package[0], package[1]
-        self.testinputs, self.testtargets = package[2], package[3]
 
         self.errorrecords = []
         self.lasterror = 100
         self.cleanerrorrecords = []
-        self.randtodisplay = randint(0, len(self.testinputs)-1)
 
         self.learnratefunction = self.descendinglearnrate
 
@@ -38,6 +34,15 @@ class Trainer:
         self.testpercent = otherargs[2]
         self.batchsize = otherargs[3]
         self.descentfactor = otherargs[4]
+
+        package = self.splittraintest(inputs, targets)
+        self.traininputs, self.traintargets = package[0], package[1]
+        self.testinputs, self.testtargets = package[2], package[3]
+
+        self.randtodisplay = randint(0, len(self.testinputs)-1)
+
+
+
 
 
     def errortiedlearnrate(self,lr):
@@ -60,7 +65,7 @@ class Trainer:
             else:
                 trainputs.append(inputs[i])
                 traingets.append(targets[i])
-
+        print("# of tests:",len(testputs))
         return trainputs, traingets, testputs, testgets
 
 
