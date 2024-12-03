@@ -13,11 +13,20 @@ def displayboard(state):
     string = ''
     for i in range(3):
         for j in range(3):
-            string += diction[state[3*i+j]]
+            current = state[3*i+j]
+            if current in diction:
+                string += diction[current]
+            else:
+                string += str(current)
             string += '|'
         string = string[0:-1] + '\n'
     return string
 
+def tostr(board):
+    return '|'.join(list(map(str, board)))
+
+def fromstr(board):
+    return list(map(int, board.split('|')))
 
 def haswon(state):
     wins = [[0, 1, 2],
@@ -72,10 +81,10 @@ def bestmove(board, player):
     if board[4] == 0:
         return 4
     
-    if board[0] == -player and board[8] == -player:
+    if board[0] == -player and board[8] == -player and 1 in allowedmoves:
         return 1
     
-    if board[2] == -player and board[6] == -player:
+    if board[2] == -player and board[6] == -player and 1 in allowedmoves:
         return 1
     
     if board == [player,-player,0,0,player,0,0,0,-player]:
@@ -161,25 +170,26 @@ rand = lambda x,y: random.randint(0,8)
 
 
 def recurse(board, active):
-    if bestmove(board) is not None:
-        lst = [board]
-    else:
-        lst = []
+    st = set()
+    if bestmove(board, -active) is not None:
+        st.add(tostr(board))
+
     for i in range(9):
         if board[i] == 0:
-            board = board.copy()
             board[i] = -active
-            lst += recurse(board, -active)
+            st = set.union(st, recurse(board, -active))
             board[i] = 0
-    return lst
+    if board == [0]*9:
+        print(len(st))
+    return st
 
 def generatedata(player):
-    inputs = recurse([0]*9, 1)
+    inputs = list(map(fromstr, recurse([0]*9, 1)))
     random.shuffle(inputs)
     ops  = []
     for i in inputs:
         best = bestmove(i, player)
-        if best:
+        if best is not None:
             new = [best // 3 -1, best %3 -1]
         else:
             new = [0,0]
@@ -202,3 +212,29 @@ def getmovefromairesults2(results):
 
 
 inputs, targets = generatedata(1)
+
+def tictacdata():
+    lst = [0]*9
+    for i in targets:
+        lst[3*(i[0]+1)+i[1]+1] += 1
+    bymoves = [[],[],[],[],[],[],[],[],[],[]]
+    for i in inputs:
+        bymoves[9-i.count(0)].append(i)
+    
+    bestmoves = [[0]*9, [0]*9, [0]*9, [0]*9, [0]*9, [0]*9, [0]*9, [0]*9, [0]*9]
+    for i in range(len(bymoves)):
+        for j in bymoves[i]:
+            bestmoves[i][bestmove(j, (i%2 - 1)*2+1)] += 1
+
+
+    print("Counts by best move:")
+    print(displayboard(lst))
+    string = "".join([str(i)+": "+str(len(bymoves[i]))+", " for i in range(len(bymoves))])
+    print("By move count: ", string)
+
+    for i in range(9):
+        print(i, 'moves: ')
+        print(displayboard(bestmoves[i]))
+
+if __name__ == '__main__':
+    tictacdata()
