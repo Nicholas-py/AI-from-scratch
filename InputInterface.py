@@ -77,14 +77,17 @@ def getinputabouttraining(trainer, trainer2 = None):
             for i in trainer.network.biases:
                 print(i)
         elif ip[0] == 'i':
-            if not multi:
-                interact(trainer.network)
-            if multi:
-                netnum = int(input("Which network? "))
-                if netnum < 2:
+            try:
+                if not multi:
                     interact(trainer.network)
-                else:
-                    interact(trainer2.network)
+                if multi:
+                    netnum = int(input("Which network? "))
+                    if netnum < 2:
+                        interact(trainer.network)
+                    else:
+                        interact(trainer2.network)
+            except:
+                pass
         else:
             return
 

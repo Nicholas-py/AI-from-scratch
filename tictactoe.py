@@ -237,4 +237,6 @@ def tictacdata():
         print(displayboard(bestmoves[i]))
 
 if __name__ == '__main__':
+    playagainst(bestmove, 1)
     tictacdata()
+    
