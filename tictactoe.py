@@ -179,11 +179,9 @@ def recurse(board, active):
             board[i] = -active
             st = set.union(st, recurse(board, -active))
             board[i] = 0
-    if board == [0]*9:
-        print(len(st))
     return st
 
-def generatedata(player):
+def generatetictac(player):
     inputs = list(map(fromstr, recurse([0]*9, 1)))
     random.shuffle(inputs)
     ops  = []
@@ -211,7 +209,7 @@ def getmovefromairesults2(results):
     return num1 * 3 + num2
 
 
-inputs, targets = generatedata(1)
+inputs, targets = generatetictac(1)
 
 def tictacdata():
     lst = [0]*9

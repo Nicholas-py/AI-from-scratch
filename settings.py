@@ -1,14 +1,14 @@
 
 settings = {
-'inputcount': 9,
-'outputcount': 2,
+'inputcount': 2,
+'outputcount': 1,
 'neuroncounts': [30]*4,
 'acfunction': 'tanh',
 'lowerval': -1,
 
 'roundsperprint': 580,
 'updatetime': 50,
-'testpercent': 0.1,
+'testpercent': 5,
 'batchsize': 800,
 
 'weightlearningrate': 0.2,
@@ -30,7 +30,7 @@ settings2 = {
 'roundsperprint': 580,
 'updatetime': 50,
 'testpercent': 0.1,
-'batchsize': 500,
+'batchsize': 800,
 
 'weightlearningrate': 0.2,
 'biaslearningrate': 0.001,

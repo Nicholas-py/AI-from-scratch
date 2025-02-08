@@ -43,6 +43,7 @@ class NeuralNetwork:
         for layer in range(len(self.neuroncounts)-1):
             #print(self.weights[layer], lastoutput)
             lastoutput = np.matmul(lastoutput, self.weights[layer]) +self.biases[layer]
+            savedputs.append(lastoutput)
             lastoutput = self.activationfunction(lastoutput)
             savedputs.append(lastoutput)
         return lastoutput, savedputs
@@ -68,12 +69,12 @@ class NeuralNetwork:
 
         #Calculate the error side of each layer
         for i in range(len(self.neuroncounts)-2,-1,-1):
-            derror = derror[:,0]* self.activationfunction.derivative(self.activationfunction.inverse(neuronoutputs[i+1][0]))
+            derror = derror[:,0]* self.activationfunction.derivative(neuronoutputs[2*i+1][0])
             dbias.append(derror)
 
             derror = derror[:, np.newaxis]
 
-            dweights.append(np.matmul(derror, neuronoutputs[i]))
+            dweights.append(np.matmul(derror, neuronoutputs[2*i]))
 
             derror = np.matmul(self.weights[i], derror)
 

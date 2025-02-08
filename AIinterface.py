@@ -9,7 +9,7 @@ from train import Trainer, multitrain
 from InputInterface import EndTraining
 from settings import settings as s1 
 from settings import settings2 as s2
-from tictactoe import generatedata
+from tictactoe import generatetictac
 
 def assertcorrectinput():
     for i in targets:
@@ -52,7 +52,7 @@ def plotinputs(inputs, targets):
         plt.scatter([i[0] for i in toplot2], [i[1] for i in toplot2])
         plt.show()
 
-inputs, targets = generatedata(1)#genbear(100003, s1['lowerval']
+inputs, targets = [[0,0]]*100, [[1]]*100#generatetictac(1)
 assertcorrectinput()
 
 args = [s1['roundsperprint'], s1['updatetime'], s1['testpercent'], s1['batchsize'], s1['descentfactor']]
