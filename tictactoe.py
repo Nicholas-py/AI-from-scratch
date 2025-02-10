@@ -127,12 +127,15 @@ def midai(board, player):
 #    print('X best move:', bestmove(board,1))
 #    print('O best move:', bestmove(board,-1))
 
-def playagainst(func, yournumber):
+def playagainst(func, yournumber, stepfunc = False):
     board = [0]*9
     for i in range(9):
         print(displayboard(board),'\n')
-
         player = ((i+1)%2)*2-1
+
+        if stepfunc:
+            stepfunc(board, player)
+
         if player == -yournumber:
             move = func(board, player)
             tick = 0
@@ -181,6 +184,21 @@ def recurse(board, active):
             board[i] = 0
     return st
 
+
+def recurse2(board, active):
+    st = set()
+    if bestmove(board, -active) is not None:
+        st.add(tostr(board)+"|"+str(-active))
+        
+
+    for i in range(9):
+        if board[i] == 0:
+            board[i] = -active
+            st = set.union(st, recurse2(board, -active))
+            board[i] = 0
+    return st
+
+
 def generatetictac(player):
     inputs = list(map(fromstr, recurse([0]*9, 1)))
     random.shuffle(inputs)
@@ -193,6 +211,17 @@ def generatetictac(player):
             new = [0,0]
         ops.append(new)
     return inputs, ops
+
+
+def generateclassifierdata():
+    inputs = list(map(fromstr, recurse2([0]*9, 1)))+list(map(fromstr, recurse2([0]*9, -1)))
+    ops = []
+    for i in inputs:
+        ops.append([whowillwin(i[0:9],i[9])])
+    return inputs, ops
+
+
+
 
 def networkplayagainst(network):
     return lambda board, player : getmovefromairesults(network.fire(board))
@@ -208,8 +237,13 @@ def getmovefromairesults2(results):
     num2 = round(results[0][1]) + 1
     return num1 * 3 + num2
 
+def whowillwin(board, player):
+    while bestmove(board, player) is not None:
+        board[bestmove(board,player)] = player
+        player = -player
+    return haswon(board)
 
-inputs, targets = generatetictac(1)
+inputs, targets = generateclassifierdata()
 
 def tictacdata():
     lst = [0]*9

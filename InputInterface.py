@@ -3,7 +3,7 @@ from Imagedecoder import getimage
 import numpy as np
 from AI import save
 import random
-from tictactoe import playagainst, networkplayagainst, networkplayagainst2
+from tictactoe import playagainst, networkplayagainst, networkplayagainst2, midai
 
 class EndTraining(Exception):
     pass
@@ -17,7 +17,14 @@ def interact(network):
 
     if network.neuroncounts[0] == 9 and network.neuroncounts[-1] == 2:
         print(playagainst(networkplayagainst2(network), -1))
+    
+    if network.neuroncounts[0] == 10 and network.neuroncounts[-1] == 1:
+        print(playagainst(midai,1,lambda x,y: printwinner(x,y,network)))
 
+def printwinner(board, player, network):
+    result = network.fire(board+[player])[0][0]
+    confidence = abs(abs(result)-0.5)*200
+    print("Predicted winner:",{-1:"O",0:"tie",1:"X"}[round(result)],f"(confidence {confidence}%)")
 
 
 def plotresults(errorrecords, ax2 = 1, max2 = 1):
@@ -86,8 +93,8 @@ def getinputabouttraining(trainer, trainer2 = None):
                         interact(trainer.network)
                     else:
                         interact(trainer2.network)
-            except:
-                pass
+            except Exception as e:
+                print(e)
         else:
             return
 
