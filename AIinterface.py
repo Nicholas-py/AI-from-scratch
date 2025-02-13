@@ -9,7 +9,7 @@ from train import Trainer, multitrain
 from InputInterface import EndTraining
 from settings import settings as s1 
 from settings import settings2 as s2
-from tictactoe import generateclassifierdata
+from tictactoedata import generateclassifierdata
 
 def assertcorrectinput():
     for i in targets:

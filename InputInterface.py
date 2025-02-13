@@ -3,7 +3,8 @@ from Imagedecoder import getimage
 import numpy as np
 from AI import save
 import random
-from tictactoe import playagainst, networkplayagainst, networkplayagainst2, midai
+from tictactoe import playagainst, networkplayagainst, networkplayagainst2
+from tictactoedata import midai
 
 class EndTraining(Exception):
     pass
