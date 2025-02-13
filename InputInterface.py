@@ -19,7 +19,8 @@ def interact(network):
         print(playagainst(networkplayagainst2(network), -1))
     
     if network.neuroncounts[0] == 10 and network.neuroncounts[-1] == 1:
-        print(playagainst(midai,1,lambda x,y: printwinner(x,y,network)))
+        print(playagainst(midai,1,stepfunc = lambda x,y: printwinner(x,y,network)))
+
 
 def printwinner(board, player, network):
     result = network.fire(board+[player])[0][0]
