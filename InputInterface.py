@@ -40,6 +40,7 @@ def plotresults(errorrecords, ax2 = 1, max2 = 1):
 
 def getinputabouttraining(trainer, trainer2 = None):
     multi = bool(trainer2 is not None)
+    dual = lambda x : pickone(x, trainer, trainer2)
     while True:
         ip = input("Input: ")
         if len(ip) == 0:
@@ -71,30 +72,80 @@ def getinputabouttraining(trainer, trainer2 = None):
         elif ip[0] == 't':
             r = random.randint(0, len(trainer.traininputs)-20)
             [print(trainer.traininputs[i], trainer.traintargets[i]) for i in range(r, r+20)]
+
         elif ip[0] == 'q' or ip[0] == 'x' or ip[0:3] == 'cd ' or ip == "c:":
-            save(trainer.network)
             raise EndTraining("Exiting program")
+        
         elif ip[0] == 's':
-            save(trainer.network)
+            dual(savenet)
+
         elif ip[0] == 'w':
             print("WEIGHTS:")
-            for i in trainer.network.weights:
-                print(i)
+            dual(lambda x:[print(i) for i in x.network.weights])
+
         elif ip[0] == 'b':
-            for i in trainer.network.biases:
-                print(i)
+            dual(lambda x:[print(i) for i in x.network.biases])
+
         elif ip[0] == 'i':
             try:
-                if not multi:
-                    interact(trainer.network)
-                if multi:
-                    netnum = int(input("Which network? "))
-                    if netnum < 2:
-                        interact(trainer.network)
-                    else:
-                        interact(trainer2.network)
+                dual(lambda x:interact(x.network))
             except Exception as e:
-                print(e)
+                print('An error occurred.')
+        
+        elif ip[0] == 'm':
+            dual(modify)
+
         else:
             return
 
+
+def modify(trainer):
+    print('''Options for modification:
+          W: Weight learning rate
+          B: Bias learning rate
+          D: Learning rate descent factor
+          S: Batchsize
+          R: Rounds per print
+          U: Update time
+          ''')
+    inp = input('Pick a letter: ').lower().strip()
+    if inp[0] not in 'wbdsru':
+        print('Invalid')
+        return
+    
+    val = float(input("What value would you like to set it to? ").strip())
+
+    if inp[0] == 'w':
+        trainer.network.weightlearnrate = val
+    elif inp[0] == 'b':
+        trainer.network.biaslearnrate = val
+    elif inp[0] == 'd':
+        trainer.network.descentfactor = val
+    elif inp[0] == 's':
+        trainer.batchsize = int(val)
+    elif inp[0] == 'r':
+        trainer.roundsperprint  = int(val)
+    elif inp[0] == 'u':
+        trainer.updatetime = int(val)
+
+def savenet(trainer):
+    save(trainer.network)
+
+def pickone(func, one, two):
+    if two is None:
+        func(one)
+        return
+    
+    while True:
+        inp = input("Which network? ").lower().strip()
+        if inp[0] == '1' or 'one' in inp or  'first' in inp:
+            func(one)
+            return
+        elif inp[0] == '2' or 'two' in inp or  'second' in inp:
+            func(two)
+            return
+        elif 'x' in inp:
+            print("Canceling... ")
+            return
+
+    

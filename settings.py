@@ -1,18 +1,18 @@
 
-settings = {
+settings =  {
 'inputcount': 10,
 'outputcount': 1,
-'neuroncounts': [80]*4,
+'neuroncounts': [40]*6,
 'acfunction': 'tanh',
 'lowerval': -1,
 
 'roundsperprint': 580,
 'updatetime': 50,
 'testpercent': 5,
-'batchsize': 800,
+'batchsize': 1600,
 
-'weightlearningrate': 0.5,
-'biaslearningrate': 0.00001,
+'weightlearningrate': 0.8,
+'biaslearningrate': 0.0001,
 'descentfactor':0.999999  #The closer to 1, the slower the descent (if greater than one learnrate increases)
 }
 
@@ -23,18 +23,18 @@ settings['neuroncounts'] = [settings['inputcount']]+settings['neuroncounts']
 settings2 = {
 'inputcount': 10,
 'outputcount': 1,
-'neuroncounts': [50]*5,
+'neuroncounts': [50]*8,
 'acfunction': 'tanh',
 'lowerval': -1,
 
 'roundsperprint': 580,
 'updatetime': 50,
 'testpercent': 5,
-'batchsize': 1600,
+'batchsize': 3200,
 
-'weightlearningrate': 0.8,
-'biaslearningrate': 0.00001,
-'descentfactor':0.999999  #The closer to 1, the slower the descent (if greater than one learnrate increases)
+'weightlearningrate': 1.2,
+'biaslearningrate': 0.0001,
+'descentfactor':0.9999  #The closer to 1, the slower the descent (if greater than one learnrate increases)
 }
 
 settings2['neuroncounts'].append(settings2['outputcount'])

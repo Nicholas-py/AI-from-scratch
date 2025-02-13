@@ -243,7 +243,8 @@ def whowillwin(board, player):
         player = -player
     return haswon(board)
 
-inputs, targets = generateclassifierdata()
+if __name__ == "__main__":
+    inputs, targets = generateclassifierdata()
 
 def tictacdata():
     lst = [0]*9
