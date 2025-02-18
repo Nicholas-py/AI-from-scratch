@@ -131,7 +131,7 @@ def modify(trainer):
         trainer.updatetime = int(val)
 
 def savenet(trainer):
-    save(trainer.network)
+    trainer.save()
 
 def pickone(func, one, two):
     if two is None:

@@ -66,17 +66,14 @@ if __name__ == '__main__':
     dual = 'n' not in input("Dual train? ")
     if not dual:
         if 'y' in input("Load last result?"):
-            print('loading... (probably broken)')
+            print('loading... ')
             net = load()
         else:  
             net = NeuralNetwork(s1['neuroncounts'], s1['weightlearningrate'], s1['biaslearningrate'], s1['acfunction'])
+
         trainer = Trainer(net, inputs, targets, args)
-        try:
-            trainer.train()
-        except (KeyboardInterrupt, EndTraining):
-            print("Exiting")
-            trainer.save()
-            quit()
+
+        trainer.train()
 
 
     if dual:
@@ -85,13 +82,7 @@ if __name__ == '__main__':
         trainer1 = Trainer(net1, inputs, targets, args)
         trainer2 = Trainer(net2, inputs, targets, arg2)
 
-        while True:
-            try:
-                multitrain(trainer1, trainer2)
-            except (KeyboardInterrupt, EndTraining):
-                print("Exiting")
-                trainer1.save()
-                quit()
+        multitrain(trainer1, trainer2)
 
 
 

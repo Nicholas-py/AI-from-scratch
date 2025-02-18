@@ -2,7 +2,7 @@
 settings =  {
 'inputcount': 10,
 'outputcount': 1,
-'neuroncounts': [40]*6,
+'neuroncounts': [50]*8,
 'acfunction': 'tanh',
 'lowerval': -1,
 

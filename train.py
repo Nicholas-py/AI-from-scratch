@@ -117,10 +117,14 @@ class Trainer:
 
     def train(self):
         while True:
-
-            getinputabouttraining(self)
-            self.trainstep()
-            self.log()
+            try:
+                getinputabouttraining(self)
+                self.trainstep()
+                self.log()
+            except (EndTraining, KeyboardInterrupt):
+                print('Exiting')
+                self.save()
+                return
 
     
 
@@ -148,13 +152,18 @@ class Trainer:
 
 
 def multitrain(trainer1, trainer2):
-    getinputabouttraining(trainer1, trainer2)
-    print('\nNetwork 1\n')
-    trainer1.trainstep()
-    trainer1.log()
-    print('\nNetwork 2\n')
-    trainer2.trainstep()
-    trainer2.log()
+    while True:
+        try:
+            getinputabouttraining(trainer1, trainer2)
+            print('\nNetwork 1\n')
+            trainer1.trainstep()
+            trainer1.log()
+            print('\nNetwork 2\n')
+            trainer2.trainstep()
+            trainer2.log()
+        except (EndTraining, KeyboardInterrupt):
+            print('Exiting')
+            return
 
 
 
